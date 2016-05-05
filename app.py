@@ -3,7 +3,7 @@ import numpy as np
 import cv2
 import subprocess as sp
 import shutil
-from flask import Flask, render_template, request, send_file, send_from_directory
+from flask import Flask, render_template, request, send_from_directory
 
 UPLOAD_FOLDER = 'uploads/'
 ALLOWED_EXTENSIONS = set(['png','webm', 'mkv', 'flv', 'vob', 'ogv', 'ogg', 'drc', 'gif', 'gifv', 'mng', 'avi', 'mov', 'qt', 'wmv', 'rm', 'rmvb', 'asf', 'mp4', 'm4p', 'm4v', 'mpg', 'mp2', 'mpeg', 'mpe', 'mpv', 'm2v', 'm4v', 'svi', '3gp', '3g2', 'mxf', 'roq', 'nsv', 'flv', 'f4v', 'f4p', 'f4a', 'f4b', 'yuv']) # https://en.wikipedia.org/wiki/Video_file_format
@@ -80,15 +80,21 @@ def upload_file():
     if request.method == 'POST':
         file = request.files['file']
         if file and allowed_file(file.filename):
-            shutil.rmtree(UPLOAD_FOLDER)
-            os.makedirs(UPLOAD_FOLDER)
+            my_dir = os.path.abspath(os.path.dirname(__file__))
+            uploadpath = os.path.join(my_dir, app.config['UPLOAD_FOLDER'])
+            try:
+                shutil.rmtree(uploadpath)
+            except:
+                pass
+            os.makedirs(uploadpath)
             filename = 'original_video.' + file.filename.split('.', 1)[-1]
-            filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+            filepath = os.path.join(uploadpath, filename)
             file.save(filepath)
             upsidedown = 'upsidedown' in request.form
-            hologram(filepath, UPLOAD_FOLDER + 'video_noaudio.avi', screen_below_pyramid=upsidedown)
-            sp.call(['avconv', '-y', '-i', UPLOAD_FOLDER + 'video_noaudio.avi', '-i', filepath, '-c', 'copy', '-map', '0:0', '-map', '1:1', UPLOAD_FOLDER + 'out.mkv']) # Add audio track
-            return send_from_directory(app.config['UPLOAD_FOLDER'], 'out.mkv', as_attachment=True)
+            outpath = os.path.join(uploadpath, 'video_noaudio.avi')
+            hologram(filepath, outpath, screen_below_pyramid=upsidedown)
+            sp.call(['avconv', '-y', '-i', outpath, '-i', filepath, '-c', 'copy', '-map', '0:0', '-map', '1:1', os.path.join(uploadpath, 'out.mkv')]) # Add audio track
+            return send_from_directory(uploadpath, 'out.mkv', as_attachment=True)
     return form()
 
 # Run the app :)
