@@ -1,0 +1,38 @@
+<!-- Mpdified from http://code.runnable.com/UhLMQLffO1YSAADK/handle-a-post-request-in-flask-for-python -->
+<html>
+    <head>
+        <title>Pseudo-hologram video maker</title>
+        <link rel=stylesheet type=text/css href="{{ url_for('static', filename='style.css') }}">
+    </head>
+    <body>
+        <div id="container">
+            <div class="title">
+                <h1>Introduction</h1>
+            </div>
+            <div>
+            <p id="intro">This web page helps you to convert video to <a href="http://www.telegraph.co.uk/technology/mobile-phones/11780393/How-to-turn-your-phone-into-a-3D-hologram-projector.html">four-side hologram video</a>. The figure below illustrates the layout of the output video. In the output video, the padding part will be pure black as well as the background. If you'd like to put your phone/tablet below hologram pyramid, check the corresponding box.</p>
+            <img width="500" src="{{ url_for('static', filename='layout.png') }}">
+            </div>
+            <div class="title">
+                <h1>Upload your video</h2>
+            </div>
+            <div id="content">
+                <form action="" method=post enctype=multipart/form-data>
+                  <label for="length">Please enter the length (0 < length ≤ 5000):</label>
+                  <input type="text" name="length" /><br />
+                  <label for="d">Please enter d (0 < d < length/2):</label>
+                  <input type="text" name="d" /><br />
+                  <label for="padding">Please enter padding (space should be remained for video):</label>
+                  <input type="text" name="padding" /><br />
+                  Projector below pyramid? <input type="checkbox" name="upsidedown"/><br /><br />
+                  <input type=file name=file>
+                  <p>File with extension listed on <a href="https://en.wikipedia.org/wiki/Video_file_format">wikipedia</a> is allowed. Size limit = 100M.</p>
+                  <p>Download will automatically start when conversion is done.</p>
+                  <input type=submit value=Submit></form>
+                </form>
+                </form>
+            </div>
+        </div>
+    </body>
+</html>
+
