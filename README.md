@@ -1,0 +1,1 @@
+This is a program converting video to the form suitable for [pseudo-hologram projection](http://www.telegraph.co.uk/technology/mobile-phones/11780393/How-to-turn-your-phone-into-a-3D-hologram-projector.html). It has been deployed on [PythonAnywhere](http://tcya.pythonanywhere.com/) for direct use. For details, please see there.
